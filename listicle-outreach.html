@@ -3,244 +3,317 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Listicle Outreach Tool</title>
+<title>Listicle Outreach — Growpad</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap');
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #0a0a0f;
-    --surface: #111118;
-    --border: #2a2a3a;
-    --accent: #c8f060;
-    --accent2: #60c8f0;
-    --text: #e8e4d9;
-    --muted: #666;
-    --success: #60f0a0;
-    --danger: #f06060;
-    --warning: #f0c860;
+    --bg: #f1f3ff;
+    --surface: #ffffff;
+    --surface2: #f8f9ff;
+    --border: #e2e5f7;
+    --primary: #23139d;
+    --primary-dark: #190353;
+    --primary-light: #d3d9ff;
+    --accent: #fd6220;
+    --accent2: #ff7955;
+    --text: #272665;
+    --muted: #8b8fc4;
+    --success: #1db87a;
+    --danger: #fd6220;
   }
 
   body {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Inter', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    padding: 24px;
   }
 
+  /* HEADER */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo { display: flex; align-items: center; }
+  .logo svg { height: 28px; width: auto; }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .badge {
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+
+  /* MAIN */
+  .main { padding: 28px 32px; max-width: 1400px; margin: 0 auto; }
+
   h1 {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 18px;
-    color: #fff;
+    font-family: 'Manrope', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--primary-dark);
     margin-bottom: 4px;
   }
 
   .subtitle {
-    font-size: 11px;
+    font-size: 13px;
     color: var(--muted);
-    letter-spacing: 1px;
     margin-bottom: 24px;
   }
 
-  .badge {
-    display: inline-block;
-    font-family: 'Unbounded', sans-serif;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--accent);
-    border: 1px solid #c8f06040;
-    padding: 3px 8px;
-    border-radius: 2px;
-    margin-bottom: 12px;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
+  /* CARDS */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0 1px 3px rgba(39,38,101,0.07);
   }
 
   .card-header {
-    background: #1a1a28;
-    padding: 10px 16px;
+    background: var(--surface2);
+    padding: 11px 18px;
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
     gap: 8px;
   }
 
+  .card-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--primary); }
+  .card-dot.orange { background: var(--accent); }
+
   .card-label {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--accent);
+    letter-spacing: 1.5px;
+    color: var(--muted);
     text-transform: uppercase;
   }
 
-  .card-body { padding: 16px; }
+  .card-body { padding: 14px 18px; }
 
   textarea {
     width: 100%;
-    background: #0d0d14;
-    border: 1px solid var(--border);
-    border-radius: 4px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
     color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    line-height: 1.6;
-    padding: 12px;
+    font-family: 'Inter', monospace;
+    font-size: 12.5px;
+    line-height: 1.7;
+    padding: 11px 13px;
     resize: vertical;
     outline: none;
     transition: border-color 0.2s;
   }
+  textarea:focus { border-color: var(--primary); background: #fff; }
+  textarea::placeholder { color: var(--muted); opacity: 0.5; }
 
-  textarea:focus { border-color: #c8f06060; }
-  textarea::placeholder { color: #444; }
+  /* ACTIONS */
+  .actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
 
   .btn {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    padding: 12px 24px;
-    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 22px;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.18s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
   }
 
   .btn-primary {
-    background: var(--accent);
-    color: #0a0a0f;
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(35,19,157,0.22);
   }
-  .btn-primary:hover { background: #d4f570; transform: translateY(-1px); }
-  .btn-primary:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; }
+  .btn-primary:hover { background: #1a0d8a; transform: translateY(-1px); }
+  .btn-primary:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; transform: none; box-shadow: none; }
 
-  .btn-secondary {
-    background: transparent;
+  .btn-stop {
+    background: #fff0ed;
     color: var(--accent);
-    border: 1px solid #c8f06040;
+    border: 1.5px solid #ffd4c8;
   }
-  .btn-secondary:hover { background: #c8f06015; }
+  .btn-stop:hover { background: #ffe4de; }
 
-  .btn-sm {
-    font-size: 10px;
-    padding: 6px 12px;
-  }
-
-  .actions {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    margin-bottom: 24px;
-  }
-
-  .counter {
-    font-size: 11px;
-    color: var(--muted);
+  .url-counter {
     margin-left: auto;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
   }
 
-  /* Progress */
+  /* PROGRESS */
   .progress-wrap {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px;
+    border-radius: 12px;
+    padding: 18px 20px;
     margin-bottom: 16px;
     display: none;
+    box-shadow: 0 1px 3px rgba(39,38,101,0.07);
   }
 
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .progress-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .progress-count { font-size: 13px; font-weight: 600; color: var(--primary); }
+
   .progress-bar-bg {
-    background: #1a1a28;
-    border-radius: 4px;
-    height: 6px;
+    background: var(--bg);
+    border-radius: 6px;
+    height: 7px;
     overflow: hidden;
-    margin-top: 10px;
+    margin-bottom: 8px;
   }
 
   .progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    border-radius: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 6px;
     transition: width 0.4s ease;
     width: 0%;
   }
 
-  .progress-text {
-    font-size: 11px;
-    color: var(--muted);
+  .progress-status {
     display: flex;
     justify-content: space-between;
-    margin-top: 6px;
+    font-size: 12px;
+    color: var(--muted);
   }
 
   .log {
-    font-size: 11px;
-    color: #555;
-    margin-top: 8px;
-    min-height: 20px;
+    margin-top: 10px;
+    font-size: 12px;
+    min-height: 18px;
+    padding: 8px 12px;
+    background: var(--bg);
+    border-radius: 6px;
+    color: var(--muted);
   }
+  .log .ok { color: var(--success); font-weight: 500; }
+  .log .err { color: var(--danger); font-weight: 500; }
+  .log .info { color: var(--primary); }
 
-  .log .ok { color: var(--success); }
-  .log .err { color: var(--danger); }
-  .log .info { color: var(--accent2); }
-
-  /* Results table */
+  /* RESULTS */
   .results-wrap {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
     display: none;
+    box-shadow: 0 1px 3px rgba(39,38,101,0.07);
   }
 
   .results-header {
-    background: #1a1a28;
-    padding: 12px 16px;
+    background: var(--surface2);
+    padding: 14px 20px;
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
-  .results-label {
-    font-size: 10px;
+  .results-title {
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--accent);
+    letter-spacing: 1.5px;
+    color: var(--muted);
     text-transform: uppercase;
   }
 
-  .results-stats {
+  .results-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+
+  .stats { display: flex; gap: 12px; }
+
+  .stat {
+    font-size: 12px;
+    color: var(--muted);
     display: flex;
-    gap: 16px;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .stat-num {
+    font-weight: 700;
+    color: var(--text);
+    background: var(--primary-light);
+    padding: 1px 7px;
+    border-radius: 10px;
     font-size: 11px;
   }
 
-  .stat { color: var(--muted); }
-  .stat span { color: var(--text); font-weight: 600; }
+  .stat-num.orange { background: #fff0ed; color: var(--accent); }
+  .stat-num.green { background: #e8faf3; color: var(--success); }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 11.5px;
+  .copy-btn {
+    background: var(--primary);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 7px 16px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.18s;
   }
+  .copy-btn:hover { background: #1a0d8a; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
 
   th {
-    background: #161620;
-    padding: 10px 14px;
+    background: #f4f5fb;
+    padding: 10px 16px;
     text-align: left;
     font-size: 10px;
     font-weight: 700;
@@ -252,157 +325,178 @@
   }
 
   td {
-    padding: 12px 14px;
-    border-bottom: 1px solid #1a1a28;
-    vertical-align: top;
-    line-height: 1.5;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
   }
 
   tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #111118; }
+  tr:hover td { background: #fafbff; }
 
-  .url-cell {
-    max-width: 280px;
+  .num-cell { color: var(--muted); text-align: center; width: 40px; font-size: 12px; }
+
+  .url-cell a {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 12px;
     word-break: break-all;
-    color: var(--accent2);
-    font-size: 11px;
+    transition: color 0.15s;
+  }
+  .url-cell a:hover { color: var(--accent); text-decoration: underline; }
+
+  .mention-yes {
+    display: inline-flex; align-items: center; gap: 5px;
+    color: var(--success); font-weight: 600; font-size: 12px;
+    background: #e8faf3; padding: 3px 10px; border-radius: 20px;
+  }
+  .mention-no {
+    display: inline-flex; align-items: center; gap: 5px;
+    color: var(--danger); font-weight: 600; font-size: 12px;
+    background: #fff0ed; padding: 3px 10px; border-radius: 20px;
+  }
+  .mention-na {
+    display: inline-flex; align-items: center; gap: 5px;
+    color: var(--muted); font-weight: 500; font-size: 12px;
+    background: var(--bg); padding: 3px 10px; border-radius: 20px;
   }
 
-  .mention-yes { color: var(--success); font-weight: 600; }
-  .mention-no { color: var(--danger); font-weight: 600; }
-  .mention-na { color: var(--muted); }
-
-  .email-cell { color: var(--warning); }
-  .email-form { color: var(--muted); font-style: italic; }
-
-  .msg-cell {
-    max-width: 320px;
-    font-size: 11px;
-    color: #aaa;
-    white-space: pre-wrap;
-    word-break: break-word;
+  .email-val {
+    color: var(--primary-dark);
+    font-size: 12px;
+    font-weight: 500;
   }
-
-  .expand-btn {
-    background: transparent;
-    border: 1px solid var(--border);
+  .email-form {
     color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    padding: 3px 8px;
-    border-radius: 3px;
-    cursor: pointer;
-    margin-top: 4px;
+    font-size: 12px;
+    font-style: italic;
   }
-  .expand-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .email-dash { color: var(--muted); font-size: 12px; }
 
-  .copy-all-btn {
-    background: #c8f06015;
-    border: 1px solid #c8f06040;
-    color: var(--accent);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    padding: 6px 14px;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .copy-all-btn:hover { background: #c8f06030; }
+  .status-cell { font-size: 11px; color: var(--muted); }
 
   .loading-row td {
     color: var(--muted);
     font-style: italic;
-    animation: pulse 1.5s ease-in-out infinite;
+    font-size: 12px;
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
-  }
-
-  .num-cell { color: var(--muted); text-align: center; width: 36px; }
+  .pulse { animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
 </style>
 </head>
 <body>
 
-<div class="badge">Growpad · Listicle Outreach</div>
-<h1>Listicle Outreach Tool</h1>
-<p class="subtitle">Крок 1: перевірка згадки + пошук email · Крок 2: листи генерує Claude в чаті</p>
-
-<div class="grid">
-  <div class="card">
-    <div class="card-header">
-      <span class="card-label">Бриф клієнта</span>
-    </div>
-    <div class="card-body">
-      <textarea id="brief" rows="7" placeholder="Company: Omegarender
-Site: https://omegarender.com
-Blog: https://omegarender.com/blog
-Niche: 3D rendering
-Sender: Alex,
-Partnerships at Omegarender | alex@omegarender.com"></textarea>
-    </div>
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1346.8 300.8">
+      <defs><style>.s0{fill:#190353}.s1{fill:#0051f3}.s2{fill:#ffa300}.s3{fill:#4bd8f9}.s4{fill:#ff7d64}</style></defs>
+      <g>
+        <polygon class="s1" points="152.6 19.6 13.9 230.4 291.4 230.4 152.6 19.6"/>
+        <polygon class="s3" points="291.4 230.4 193.9 230.4 103.9 93.6 152.6 19.6 291.4 230.4"/>
+        <polygon class="s2" points="152.6 167.6 111.3 230.4 152.6 293.1 193.9 230.4 152.6 167.6"/>
+        <polygon class="s4" points="152.6 167.6 152.6 293.1 152.6 293.1 111.3 230.4 152.6 167.6 152.6 167.6"/>
+      </g>
+      <g>
+        <path class="s0" d="M361.2,150.5c0,32,22.2,52.5,56.5,52.5s14.8-.8,21.5-2.2v-28.2h-36.5v-31h72.2v81.5c-15.8,9-34,13-58.8,13-56.5,0-92.5-33.2-92.5-85.5s36-85.5,92.5-85.5,43,4,58.8,13v40.5h-1.8c-14.5-14-33-20.5-55.5-20.5-34.2,0-56.5,20.5-56.5,52.5Z"/>
+        <path class="s0" d="M580.7,118v32h-1.2c-5-3.5-11.2-5.5-18.5-5.5-20,0-29,12.2-29,38.5v50.5h-32.8v-117.5h27.2l1.5,18.2h.5c6.5-13.8,18-20.8,35-20.8s13.8,1.8,17.2,4.5Z"/>
+        <path class="s0" d="M709.2,174.8c0,35.8-26,61.2-62.8,61.2s-63-25.5-63-61.2,26-61.2,63-61.2,62.8,25.2,62.8,61.2ZM616.4,174.8c0,19,12.2,32.2,30,32.2s29.8-13.2,29.8-32.2-12.2-32.2-29.8-32.2-30,13.2-30,32.2Z"/>
+        <path class="s0" d="M858.7,233.5h-31.2l-23.5-71h-.5l-23.8,71h-31.2l-39.5-117.5h34.8l22,75.8h.5l25.2-75.8h25.8l25,75.8h.5l22-75.8h33.2l-39.2,117.5Z"/>
+      </g>
+      <g>
+        <path class="s0" d="M988.9,70c41.5,0,62.8,18.8,62.8,55.2s-21.2,55-62.8,55h-36.2v55.8h-37V70h73.2ZM987.2,147.3c18.5,0,27-7,27-22s-8.5-22.2-27-22.2h-34.5v44.2h34.5Z"/>
+        <path class="s0" d="M1154.4,236l-1-15.8h-.5c-7.8,11.5-20.8,18.2-38.2,18.2-33.2,0-57.5-25.8-57.5-61.2s24.2-61.2,57.5-61.2,30.5,6.5,38,17.8h.5l1.2-15.2h27.2v117.5h-27.2ZM1149.9,177.3c0-19-12.2-32.2-29.8-32.2s-30,13.2-30,32.2,12.2,32.2,30,32.2,29.8-13.2,29.8-32.2Z"/>
+        <path class="s0" d="M1294.9,236l-1-15.8h-.5c-7.8,11.5-20.8,18.2-38.2,18.2-33.2,0-57.5-25.8-57.5-61.2s24.2-61.2,57.5-61.2,25.8,4.5,33.8,12.5h.5V61h32.8v175h-27.2ZM1290.4,177.3c0-19-12.2-32.2-29.8-32.2s-30,13.2-30,32.2,12.2,32.2,30,32.2,29.8-13.2,29.8-32.2Z"/>
+      </g>
+    </svg>
   </div>
-
-  <div class="card">
-    <div class="card-header">
-      <span class="card-label">URL лістиклів</span>
-    </div>
-    <div class="card-body">
-      <textarea id="urls" rows="7" placeholder="https://site.com/top-10-rendering-companies&#10;https://blog.com/best-3d-studios&#10;https://other.com/list-of-agencies&#10;..."></textarea>
-    </div>
+  <div class="header-right">
+    <span class="badge">Listicle Outreach Tool</span>
   </div>
 </div>
 
-<div class="actions">
-  <button class="btn btn-primary" id="startBtn" onclick="startAnalysis()">▶ Запустити аналіз</button>
-  <button class="btn btn-secondary" id="stopBtn" onclick="stopAnalysis()" style="display:none">■ Зупинити</button>
-  <span class="counter" id="urlCounter">0 URL</span>
-</div>
+<!-- MAIN -->
+<div class="main">
+  <h1>Listicle Outreach</h1>
+  <p class="subtitle">Крок 1 — перевірка згадки + пошук email &nbsp;·&nbsp; Крок 2 — листи генерує Claude в чаті</p>
 
-<div class="progress-wrap" id="progressWrap">
-  <div style="display:flex; justify-content:space-between; align-items:center">
-    <span style="font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase">Прогрес</span>
-    <span style="font-size:11px; color:var(--text)" id="progressLabel">0 / 0</span>
-  </div>
-  <div class="progress-bar-bg">
-    <div class="progress-bar-fill" id="progressBar"></div>
-  </div>
-  <div class="progress-text">
-    <span id="progressStatus">Ініціалізація...</span>
-    <span id="progressPct">0%</span>
-  </div>
-  <div class="log" id="log"></div>
-</div>
-
-<div class="results-wrap" id="resultsWrap">
-  <div class="results-header">
-    <span class="results-label">Результати</span>
-    <div style="display:flex; gap:12px; align-items:center">
-      <div class="results-stats">
-        <div class="stat">Без згадки: <span id="statNo">0</span></div>
-        <div class="stat">Є згадка: <span id="statYes">0</span></div>
-        <div class="stat">Email знайдено: <span id="statEmail">0</span></div>
-        <div class="stat">Форма: <span id="statForm">0</span></div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot"></div>
+        <span class="card-label">Бриф клієнта</span>
       </div>
-      <button class="copy-all-btn" onclick="copyResults()">COPY TABLE</button>
+      <div class="card-body">
+        <textarea id="brief" rows="7" placeholder="Company: Marygold Studio
+Site: https://marygold-studio.com/
+Blog: https://marygold-studio.com/blogs/all/
+Niche: 3d rendering services
+Sender: Alex,
+Partnerships at Marygold Studio | team@marygold-studio.com"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot orange"></div>
+        <span class="card-label">URL лістиклів</span>
+      </div>
+      <div class="card-body">
+        <textarea id="urls" rows="7" placeholder="https://site.com/top-10-rendering-companies&#10;https://blog.com/best-3d-studios&#10;..."></textarea>
+      </div>
     </div>
   </div>
-  <div style="overflow-x:auto">
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>URL</th>
-          <th>Згадка</th>
-          <th>Email</th>
-          <th>Статус</th>
-        </tr>
-      </thead>
-      <tbody id="resultsBody"></tbody>
-    </table>
+
+  <div class="actions">
+    <button class="btn btn-primary" id="startBtn" onclick="startAnalysis()">▶ Запустити аналіз</button>
+    <button class="btn btn-stop" id="stopBtn" onclick="stopAnalysis()" style="display:none">■ Зупинити</button>
+    <span class="url-counter" id="urlCounter">0 URL</span>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-top">
+      <span class="progress-label">Прогрес</span>
+      <span class="progress-count" id="progressLabel">0 / 0</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+    <div class="progress-status">
+      <span id="progressStatus">Ініціалізація...</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="log" id="log"></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-wrap" id="resultsWrap">
+    <div class="results-header">
+      <span class="results-title">Результати</span>
+      <div class="results-right">
+        <div class="stats">
+          <div class="stat">Без згадки: <span class="stat-num orange" id="statNo">0</span></div>
+          <div class="stat">Є згадка: <span class="stat-num green" id="statYes">0</span></div>
+          <div class="stat">Email: <span class="stat-num" id="statEmail">0</span></div>
+          <div class="stat">Форма: <span class="stat-num" id="statForm">0</span></div>
+        </div>
+        <button class="copy-btn" onclick="copyResults()">Копіювати таблицю</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>URL</th>
+            <th>Згадка</th>
+            <th>Email</th>
+            <th>Статус</th>
+          </tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -413,169 +507,145 @@ let results = [];
 document.getElementById('urls').addEventListener('input', updateCounter);
 
 function updateCounter() {
-  const urls = getUrls();
-  document.getElementById('urlCounter').textContent = urls.length + ' URL';
+  const n = getUrls().length;
+  document.getElementById('urlCounter').textContent = n + ' URL';
 }
 
 function getUrls() {
   return document.getElementById('urls').value
-    .split('\n')
-    .map(u => u.trim())
-    .filter(u => u && u.startsWith('http'));
+    .split('\n').map(u => u.trim()).filter(u => u.startsWith('http'));
 }
 
 function getBrief() {
   const text = document.getElementById('brief').value;
   const lines = {};
   text.split('\n').forEach(line => {
-    const [key, ...val] = line.split(':');
-    if (key && val.length) lines[key.trim().toLowerCase()] = val.join(':').trim();
+    const idx = line.indexOf(':');
+    if (idx > -1) {
+      const key = line.substring(0, idx).trim().toLowerCase();
+      const val = line.substring(idx + 1).trim();
+      lines[key] = val;
+    }
   });
   return {
-    company: lines['company'] || '',
-    site: lines['site'] || '',
-    blog: lines['blog'] || '',
-    niche: lines['niche'] || '',
-    sender: lines['sender'] || '',
+    company: (lines['company'] || '').replace(/[\[\]]/g,'').trim(),
+    site: (lines['site'] || '').replace(/[\[\]]/g,'').trim(),
     raw: text
   };
 }
 
-function log(msg, type = '') {
-  const el = document.getElementById('log');
-  el.innerHTML = `<span class="${type}">${msg}</span>`;
+function log(msg, type='') {
+  document.getElementById('log').innerHTML = `<span class="${type}">${msg}</span>`;
 }
 
 function setProgress(current, total, status) {
-  const pct = total ? Math.round((current / total) * 100) : 0;
+  const pct = total ? Math.round(current/total*100) : 0;
   document.getElementById('progressBar').style.width = pct + '%';
   document.getElementById('progressLabel').textContent = current + ' / ' + total;
   document.getElementById('progressPct').textContent = pct + '%';
   document.getElementById('progressStatus').textContent = status;
 }
 
-async function fetchViaJina(url) {
-  const jinaUrl = 'https://r.jina.ai/' + url;
-  try {
-    const resp = await fetch(jinaUrl, {
-      headers: { 'Accept': 'text/plain' }
-    });
-    if (!resp.ok) return null;
-    return await resp.text();
-  } catch {
-    return null;
-  }
-}
-
 function getDomain(url) {
-  try {
-    const u = new URL(url);
-    return u.origin;
-  } catch {
-    return null;
-  }
+  try { return new URL(url).origin; } catch { return null; }
 }
 
 function checkMention(text, brief) {
   if (!text) return false;
   const lower = text.toLowerCase();
   const company = brief.company.toLowerCase();
-  const site = brief.site.toLowerCase().replace(/https?:\/\/(www\.)?/, '').replace(/\/$/, '');
-  return lower.includes(company) || (site && lower.includes(site));
+  const site = brief.site.toLowerCase().replace(/https?:\/\/(www\.)?/,'').replace(/\/$/,'');
+  return (company && lower.includes(company)) || (site && lower.includes(site));
 }
 
 function extractEmail(text) {
   if (!text) return null;
-  const match = text.match(/[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}/);
-  return match ? match[0] : null;
+  // Try mailto links first
+  const mailtoMatch = text.match(/mailto:([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/i);
+  if (mailtoMatch) return mailtoMatch[1];
+  // Then plain email
+  const emailMatch = text.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
+  return emailMatch ? emailMatch[0] : null;
+}
+
+async function fetchViaJina(url) {
+  try {
+    const resp = await fetch('https://r.jina.ai/' + url, {
+      headers: { 'Accept': 'text/plain', 'X-No-Cache': 'true' }
+    });
+    if (!resp.ok) return null;
+    return await resp.text();
+  } catch { return null; }
+}
+
+function addLoadingRow(index, url) {
+  const tr = document.createElement('tr');
+  tr.id = 'loading-' + index;
+  tr.className = 'loading-row pulse';
+  tr.innerHTML = `
+    <td class="num-cell">${index+1}</td>
+    <td class="url-cell"><a href="${url}" target="_blank">${url}</a></td>
+    <td colspan="3" style="color:var(--muted);font-size:12px">Перевіряю...</td>`;
+  document.getElementById('resultsBody').appendChild(tr);
 }
 
 function addRow(index, url, mention, email, status) {
-  const tbody = document.getElementById('resultsBody');
-
-  // Remove loading row if exists
-  const loadingRow = document.getElementById('loading-' + index);
-  if (loadingRow) loadingRow.remove();
-
-  const tr = document.createElement('tr');
-  tr.id = 'row-' + index;
+  const old = document.getElementById('loading-' + index);
+  if (old) old.remove();
 
   let mentionHtml = '';
   if (mention === 'yes') mentionHtml = '<span class="mention-yes">✅ Так</span>';
   else if (mention === 'no') mentionHtml = '<span class="mention-no">❌ Ні</span>';
-  else mentionHtml = '<span class="mention-na">❌ Недоступна</span>';
+  else mentionHtml = '<span class="mention-na">— Недоступна</span>';
 
   let emailHtml = '';
-  if (email === 'form') emailHtml = '<span class="email-form">Форма</span>';
-  else if (email === '—') emailHtml = '<span class="mention-na">—</span>';
-  else if (email) emailHtml = '<span class="email-cell">' + email + '</span>';
-  else emailHtml = '<span class="mention-na">—</span>';
+  if (!email || email === '—') emailHtml = '<span class="email-dash">—</span>';
+  else if (email === 'form') emailHtml = '<span class="email-form">Форма</span>';
+  else emailHtml = '<span class="email-val">' + email + '</span>';
 
+  const tr = document.createElement('tr');
+  tr.id = 'row-' + index;
   tr.innerHTML = `
-    <td class="num-cell">${index + 1}</td>
-    <td class="url-cell">${url}</td>
+    <td class="num-cell">${index+1}</td>
+    <td class="url-cell"><a href="${url}" target="_blank">${url}</a></td>
     <td>${mentionHtml}</td>
     <td>${emailHtml}</td>
-    <td style="font-size:10px;color:var(--muted)">${status}</td>
-  `;
-  tbody.appendChild(tr);
-
-  // Update stats
+    <td class="status-cell">${status}</td>`;
+  document.getElementById('resultsBody').appendChild(tr);
   updateStats();
 }
 
-function addLoadingRow(index, url) {
-  const tbody = document.getElementById('resultsBody');
-  const tr = document.createElement('tr');
-  tr.id = 'loading-' + index;
-  tr.className = 'loading-row';
-  tr.innerHTML = `
-    <td class="num-cell">${index + 1}</td>
-    <td class="url-cell">${url}</td>
-    <td colspan="3">Перевіряю...</td>
-  `;
-  tbody.appendChild(tr);
-}
-
 function updateStats() {
-  const no = results.filter(r => r.mention === 'no').length;
-  const yes = results.filter(r => r.mention === 'yes').length;
-  const email = results.filter(r => r.email && r.email !== '—' && r.email !== 'form').length;
-  const form = results.filter(r => r.email === 'form').length;
-  document.getElementById('statNo').textContent = no;
-  document.getElementById('statYes').textContent = yes;
-  document.getElementById('statEmail').textContent = email;
-  document.getElementById('statForm').textContent = form;
+  document.getElementById('statNo').textContent = results.filter(r=>r.mention==='no').length;
+  document.getElementById('statYes').textContent = results.filter(r=>r.mention==='yes').length;
+  document.getElementById('statEmail').textContent = results.filter(r=>r.email&&r.email!=='—'&&r.email!=='form').length;
+  document.getElementById('statForm').textContent = results.filter(r=>r.email==='form').length;
 }
 
 async function startAnalysis() {
   const urls = getUrls();
   if (!urls.length) { alert('Додай URL лістиклів'); return; }
-
   const brief = getBrief();
   if (!brief.company) { alert('Заповни бриф (мінімум Company)'); return; }
 
   stopped = false;
   results = [];
-
+  document.getElementById('resultsBody').innerHTML = '';
   document.getElementById('startBtn').disabled = true;
-  document.getElementById('stopBtn').style.display = 'inline-block';
+  document.getElementById('stopBtn').style.display = 'inline-flex';
   document.getElementById('progressWrap').style.display = 'block';
   document.getElementById('resultsWrap').style.display = 'block';
-  document.getElementById('resultsBody').innerHTML = '';
 
   const total = urls.length;
   setProgress(0, total, 'Починаю...');
 
   for (let i = 0; i < urls.length; i++) {
     if (stopped) break;
-
     const url = urls[i];
     addLoadingRow(i, url);
-    setProgress(i, total, `Аналізую: ${url.substring(0, 60)}...`);
-    log(`[${i+1}/${total}] Читаю сторінку...`, 'info');
+    setProgress(i, total, 'Аналізую ' + (i+1) + ' з ' + total + '...');
+    log('[' + (i+1) + '/' + total + '] Читаю сторінку...', 'info');
 
-    // Step 1: Check mention
     const pageText = await fetchViaJina(url);
     let mention = 'unavailable';
     let email = '—';
@@ -584,37 +654,31 @@ async function startAnalysis() {
     if (!pageText) {
       mention = 'unavailable';
       status = 'Недоступна';
-      log(`[${i+1}/${total}] Недоступна`, 'err');
+      log('[' + (i+1) + '/' + total + '] Недоступна', 'err');
     } else {
-      const hasMention = checkMention(pageText, brief);
-      if (hasMention) {
+      if (checkMention(pageText, brief)) {
         mention = 'yes';
         status = 'Є згадка';
-        log(`[${i+1}/${total}] ✅ Згадка знайдена`, 'ok');
+        log('[' + (i+1) + '/' + total + '] ✅ Згадка знайдена', 'ok');
       } else {
         mention = 'no';
-        log(`[${i+1}/${total}] ❌ Без згадки — шукаю email...`, 'info');
+        log('[' + (i+1) + '/' + total + '] ❌ Без згадки — шукаю email...', 'info');
 
-        // Step 2: Find email
         const domain = getDomain(url);
         if (domain) {
-          // Try /contact
           const contactText = await fetchViaJina(domain + '/contact');
           email = extractEmail(contactText);
-
           if (!email) {
-            // Try /about
             const aboutText = await fetchViaJina(domain + '/about');
             email = extractEmail(aboutText);
           }
-
           if (email) {
             status = 'Email знайдено';
-            log(`[${i+1}/${total}] 📧 Email: ${email}`, 'ok');
+            log('[' + (i+1) + '/' + total + '] 📧 ' + email, 'ok');
           } else {
             email = 'form';
             status = 'Тільки форма';
-            log(`[${i+1}/${total}] 📝 Email не знайдено — форма`, 'info');
+            log('[' + (i+1) + '/' + total + '] 📝 Email не знайдено — форма', 'info');
           }
         }
       }
@@ -622,18 +686,16 @@ async function startAnalysis() {
 
     results.push({ index: i, url, mention, email, status });
     addRow(i, url, mention, email, status);
-    setProgress(i + 1, total, i + 1 === total ? 'Готово!' : 'Обробляю...');
-
-    // Small delay to avoid rate limiting
-    if (i < urls.length - 1) await sleep(300);
+    setProgress(i+1, total, i+1===total ? '✅ Завершено' : 'Обробляю...');
+    if (i < urls.length-1) await new Promise(r => setTimeout(r, 300));
   }
 
   document.getElementById('startBtn').disabled = false;
   document.getElementById('stopBtn').style.display = 'none';
 
   if (!stopped) {
-    log(`✅ Аналіз завершено. ${results.filter(r=>r.mention==='no').length} URL потребують outreach.`, 'ok');
-    setProgress(total, total, '✅ Завершено');
+    const needOutreach = results.filter(r=>r.mention==='no').length;
+    log('✅ Аналіз завершено. ' + needOutreach + ' URL потребують outreach.', 'ok');
   }
 }
 
@@ -644,37 +706,34 @@ function stopAnalysis() {
   log('Зупинено користувачем', 'err');
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 function copyResults() {
   const brief = getBrief();
-  let md = `# Listicle Outreach Results\n`;
-  md += `**Company:** ${brief.company}\n`;
-  md += `**Site:** ${brief.site}\n\n`;
-  md += `| # | URL | Згадка | Email |\n`;
-  md += `|---|-----|--------|-------|\n`;
+  let md = '# Listicle Outreach Results\n';
+  md += '**Company:** ' + brief.company + '\n';
+  md += '**Site:** ' + brief.site + '\n\n';
+  md += '| # | URL | Згадка | Email |\n';
+  md += '|---|-----|--------|-------|\n';
 
   results.forEach((r, i) => {
-    const mention = r.mention === 'yes' ? '✅ Так' : r.mention === 'no' ? '❌ Ні' : '❌ Недоступна';
-    const email = r.email === 'form' ? 'Форма' : (r.email || '—');
-    md += `| ${i+1} | ${r.url} | ${mention} | ${email} |\n`;
+    const mention = r.mention==='yes' ? '✅ Так' : r.mention==='no' ? '❌ Ні' : '❌ Недоступна';
+    const email = r.email==='form' ? 'Форма' : (r.email||'—');
+    md += '| ' + (i+1) + ' | ' + r.url + ' | ' + mention + ' | ' + email + ' |\n';
   });
 
-  const noMention = results.filter(r => r.mention === 'no');
+  const noMention = results.filter(r=>r.mention==='no');
   if (noMention.length) {
-    md += `\n---\n## Потребують outreach (${noMention.length} URL)\n\n`;
+    md += '\n---\n## Потребують outreach (' + noMention.length + ' URL)\n\n';
     noMention.forEach((r, i) => {
-      const email = r.email === 'form' ? 'Форма' : (r.email || '—');
-      md += `${i+1}. ${r.url} | ${email}\n`;
+      const email = r.email==='form' ? 'Форма' : (r.email||'—');
+      md += (i+1) + '. ' + r.url + ' | ' + email + '\n';
     });
   }
 
   navigator.clipboard.writeText(md).then(() => {
     const btn = event.target;
-    btn.textContent = 'COPIED ✓';
-    setTimeout(() => btn.textContent = 'COPY TABLE', 2000);
+    const orig = btn.textContent;
+    btn.textContent = '✓ Скопійовано';
+    setTimeout(() => btn.textContent = orig, 2000);
   });
 }
 </script>
