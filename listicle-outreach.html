@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listicle Outreach Tool</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@400;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --border: #2a2a3a;
+    --accent: #c8f060;
+    --accent2: #60c8f0;
+    --text: #e8e4d9;
+    --muted: #666;
+    --success: #60f0a0;
+    --danger: #f06060;
+    --warning: #f0c860;
+  }
+
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px;
+  }
+
+  h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    border: 1px solid #c8f06040;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-bottom: 12px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    background: #1a1a28;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .card-body { padding: 16px; }
+
+  textarea {
+    width: 100%;
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    padding: 12px;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  textarea:focus { border-color: #c8f06060; }
+  textarea::placeholder { color: #444; }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 12px 24px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0a0a0f;
+  }
+  .btn-primary:hover { background: #d4f570; transform: translateY(-1px); }
+  .btn-primary:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid #c8f06040;
+  }
+  .btn-secondary:hover { background: #c8f06015; }
+
+  .btn-sm {
+    font-size: 10px;
+    padding: 6px 12px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .counter {
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  /* Progress */
+  .progress-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  .progress-bar-bg {
+    background: #1a1a28;
+    border-radius: 4px;
+    height: 6px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .progress-text {
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+  }
+
+  .log {
+    font-size: 11px;
+    color: #555;
+    margin-top: 8px;
+    min-height: 20px;
+  }
+
+  .log .ok { color: var(--success); }
+  .log .err { color: var(--danger); }
+  .log .info { color: var(--accent2); }
+
+  /* Results table */
+  .results-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    display: none;
+  }
+
+  .results-header {
+    background: #1a1a28;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .results-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .results-stats {
+    display: flex;
+    gap: 16px;
+    font-size: 11px;
+  }
+
+  .stat { color: var(--muted); }
+  .stat span { color: var(--text); font-weight: 600; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+  }
+
+  th {
+    background: #161620;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #1a1a28;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #111118; }
+
+  .url-cell {
+    max-width: 280px;
+    word-break: break-all;
+    color: var(--accent2);
+    font-size: 11px;
+  }
+
+  .mention-yes { color: var(--success); font-weight: 600; }
+  .mention-no { color: var(--danger); font-weight: 600; }
+  .mention-na { color: var(--muted); }
+
+  .email-cell { color: var(--warning); }
+  .email-form { color: var(--muted); font-style: italic; }
+
+  .msg-cell {
+    max-width: 320px;
+    font-size: 11px;
+    color: #aaa;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .expand-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  .expand-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .copy-all-btn {
+    background: #c8f06015;
+    border: 1px solid #c8f06040;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 6px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy-all-btn:hover { background: #c8f06030; }
+
+  .loading-row td {
+    color: var(--muted);
+    font-style: italic;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  .num-cell { color: var(--muted); text-align: center; width: 36px; }
+</style>
+</head>
+<body>
+
+<div class="badge">Growpad · Listicle Outreach</div>
+<h1>Listicle Outreach Tool</h1>
+<p class="subtitle">Крок 1: перевірка згадки + пошук email · Крок 2: листи генерує Claude в чаті</p>
+
+<div class="grid">
+  <div class="card">
+    <div class="card-header">
+      <span class="card-label">Бриф клієнта</span>
+    </div>
+    <div class="card-body">
+      <textarea id="brief" rows="7" placeholder="Company: Omegarender
+Site: https://omegarender.com
+Blog: https://omegarender.com/blog
+Niche: 3D rendering
+Sender: Alex,
+Partnerships at Omegarender | alex@omegarender.com"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-label">URL лістиклів</span>
+    </div>
+    <div class="card-body">
+      <textarea id="urls" rows="7" placeholder="https://site.com/top-10-rendering-companies&#10;https://blog.com/best-3d-studios&#10;https://other.com/list-of-agencies&#10;..."></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="actions">
+  <button class="btn btn-primary" id="startBtn" onclick="startAnalysis()">▶ Запустити аналіз</button>
+  <button class="btn btn-secondary" id="stopBtn" onclick="stopAnalysis()" style="display:none">■ Зупинити</button>
+  <span class="counter" id="urlCounter">0 URL</span>
+</div>
+
+<div class="progress-wrap" id="progressWrap">
+  <div style="display:flex; justify-content:space-between; align-items:center">
+    <span style="font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase">Прогрес</span>
+    <span style="font-size:11px; color:var(--text)" id="progressLabel">0 / 0</span>
+  </div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressBar"></div>
+  </div>
+  <div class="progress-text">
+    <span id="progressStatus">Ініціалізація...</span>
+    <span id="progressPct">0%</span>
+  </div>
+  <div class="log" id="log"></div>
+</div>
+
+<div class="results-wrap" id="resultsWrap">
+  <div class="results-header">
+    <span class="results-label">Результати</span>
+    <div style="display:flex; gap:12px; align-items:center">
+      <div class="results-stats">
+        <div class="stat">Без згадки: <span id="statNo">0</span></div>
+        <div class="stat">Є згадка: <span id="statYes">0</span></div>
+        <div class="stat">Email знайдено: <span id="statEmail">0</span></div>
+        <div class="stat">Форма: <span id="statForm">0</span></div>
+      </div>
+      <button class="copy-all-btn" onclick="copyResults()">COPY TABLE</button>
+    </div>
+  </div>
+  <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>URL</th>
+          <th>Згадка</th>
+          <th>Email</th>
+          <th>Статус</th>
+        </tr>
+      </thead>
+      <tbody id="resultsBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+let stopped = false;
+let results = [];
+
+document.getElementById('urls').addEventListener('input', updateCounter);
+
+function updateCounter() {
+  const urls = getUrls();
+  document.getElementById('urlCounter').textContent = urls.length + ' URL';
+}
+
+function getUrls() {
+  return document.getElementById('urls').value
+    .split('\n')
+    .map(u => u.trim())
+    .filter(u => u && u.startsWith('http'));
+}
+
+function getBrief() {
+  const text = document.getElementById('brief').value;
+  const lines = {};
+  text.split('\n').forEach(line => {
+    const [key, ...val] = line.split(':');
+    if (key && val.length) lines[key.trim().toLowerCase()] = val.join(':').trim();
+  });
+  return {
+    company: lines['company'] || '',
+    site: lines['site'] || '',
+    blog: lines['blog'] || '',
+    niche: lines['niche'] || '',
+    sender: lines['sender'] || '',
+    raw: text
+  };
+}
+
+function log(msg, type = '') {
+  const el = document.getElementById('log');
+  el.innerHTML = `<span class="${type}">${msg}</span>`;
+}
+
+function setProgress(current, total, status) {
+  const pct = total ? Math.round((current / total) * 100) : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = current + ' / ' + total;
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressStatus').textContent = status;
+}
+
+async function fetchViaJina(url) {
+  const jinaUrl = 'https://r.jina.ai/' + url;
+  try {
+    const resp = await fetch(jinaUrl, {
+      headers: { 'Accept': 'text/plain' }
+    });
+    if (!resp.ok) return null;
+    return await resp.text();
+  } catch {
+    return null;
+  }
+}
+
+function getDomain(url) {
+  try {
+    const u = new URL(url);
+    return u.origin;
+  } catch {
+    return null;
+  }
+}
+
+function checkMention(text, brief) {
+  if (!text) return false;
+  const lower = text.toLowerCase();
+  const company = brief.company.toLowerCase();
+  const site = brief.site.toLowerCase().replace(/https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+  return lower.includes(company) || (site && lower.includes(site));
+}
+
+function extractEmail(text) {
+  if (!text) return null;
+  const match = text.match(/[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}/);
+  return match ? match[0] : null;
+}
+
+function addRow(index, url, mention, email, status) {
+  const tbody = document.getElementById('resultsBody');
+
+  // Remove loading row if exists
+  const loadingRow = document.getElementById('loading-' + index);
+  if (loadingRow) loadingRow.remove();
+
+  const tr = document.createElement('tr');
+  tr.id = 'row-' + index;
+
+  let mentionHtml = '';
+  if (mention === 'yes') mentionHtml = '<span class="mention-yes">✅ Так</span>';
+  else if (mention === 'no') mentionHtml = '<span class="mention-no">❌ Ні</span>';
+  else mentionHtml = '<span class="mention-na">❌ Недоступна</span>';
+
+  let emailHtml = '';
+  if (email === 'form') emailHtml = '<span class="email-form">Форма</span>';
+  else if (email === '—') emailHtml = '<span class="mention-na">—</span>';
+  else if (email) emailHtml = '<span class="email-cell">' + email + '</span>';
+  else emailHtml = '<span class="mention-na">—</span>';
+
+  tr.innerHTML = `
+    <td class="num-cell">${index + 1}</td>
+    <td class="url-cell">${url}</td>
+    <td>${mentionHtml}</td>
+    <td>${emailHtml}</td>
+    <td style="font-size:10px;color:var(--muted)">${status}</td>
+  `;
+  tbody.appendChild(tr);
+
+  // Update stats
+  updateStats();
+}
+
+function addLoadingRow(index, url) {
+  const tbody = document.getElementById('resultsBody');
+  const tr = document.createElement('tr');
+  tr.id = 'loading-' + index;
+  tr.className = 'loading-row';
+  tr.innerHTML = `
+    <td class="num-cell">${index + 1}</td>
+    <td class="url-cell">${url}</td>
+    <td colspan="3">Перевіряю...</td>
+  `;
+  tbody.appendChild(tr);
+}
+
+function updateStats() {
+  const no = results.filter(r => r.mention === 'no').length;
+  const yes = results.filter(r => r.mention === 'yes').length;
+  const email = results.filter(r => r.email && r.email !== '—' && r.email !== 'form').length;
+  const form = results.filter(r => r.email === 'form').length;
+  document.getElementById('statNo').textContent = no;
+  document.getElementById('statYes').textContent = yes;
+  document.getElementById('statEmail').textContent = email;
+  document.getElementById('statForm').textContent = form;
+}
+
+async function startAnalysis() {
+  const urls = getUrls();
+  if (!urls.length) { alert('Додай URL лістиклів'); return; }
+
+  const brief = getBrief();
+  if (!brief.company) { alert('Заповни бриф (мінімум Company)'); return; }
+
+  stopped = false;
+  results = [];
+
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('stopBtn').style.display = 'inline-block';
+  document.getElementById('progressWrap').style.display = 'block';
+  document.getElementById('resultsWrap').style.display = 'block';
+  document.getElementById('resultsBody').innerHTML = '';
+
+  const total = urls.length;
+  setProgress(0, total, 'Починаю...');
+
+  for (let i = 0; i < urls.length; i++) {
+    if (stopped) break;
+
+    const url = urls[i];
+    addLoadingRow(i, url);
+    setProgress(i, total, `Аналізую: ${url.substring(0, 60)}...`);
+    log(`[${i+1}/${total}] Читаю сторінку...`, 'info');
+
+    // Step 1: Check mention
+    const pageText = await fetchViaJina(url);
+    let mention = 'unavailable';
+    let email = '—';
+    let status = '';
+
+    if (!pageText) {
+      mention = 'unavailable';
+      status = 'Недоступна';
+      log(`[${i+1}/${total}] Недоступна`, 'err');
+    } else {
+      const hasMention = checkMention(pageText, brief);
+      if (hasMention) {
+        mention = 'yes';
+        status = 'Є згадка';
+        log(`[${i+1}/${total}] ✅ Згадка знайдена`, 'ok');
+      } else {
+        mention = 'no';
+        log(`[${i+1}/${total}] ❌ Без згадки — шукаю email...`, 'info');
+
+        // Step 2: Find email
+        const domain = getDomain(url);
+        if (domain) {
+          // Try /contact
+          const contactText = await fetchViaJina(domain + '/contact');
+          email = extractEmail(contactText);
+
+          if (!email) {
+            // Try /about
+            const aboutText = await fetchViaJina(domain + '/about');
+            email = extractEmail(aboutText);
+          }
+
+          if (email) {
+            status = 'Email знайдено';
+            log(`[${i+1}/${total}] 📧 Email: ${email}`, 'ok');
+          } else {
+            email = 'form';
+            status = 'Тільки форма';
+            log(`[${i+1}/${total}] 📝 Email не знайдено — форма`, 'info');
+          }
+        }
+      }
+    }
+
+    results.push({ index: i, url, mention, email, status });
+    addRow(i, url, mention, email, status);
+    setProgress(i + 1, total, i + 1 === total ? 'Готово!' : 'Обробляю...');
+
+    // Small delay to avoid rate limiting
+    if (i < urls.length - 1) await sleep(300);
+  }
+
+  document.getElementById('startBtn').disabled = false;
+  document.getElementById('stopBtn').style.display = 'none';
+
+  if (!stopped) {
+    log(`✅ Аналіз завершено. ${results.filter(r=>r.mention==='no').length} URL потребують outreach.`, 'ok');
+    setProgress(total, total, '✅ Завершено');
+  }
+}
+
+function stopAnalysis() {
+  stopped = true;
+  document.getElementById('startBtn').disabled = false;
+  document.getElementById('stopBtn').style.display = 'none';
+  log('Зупинено користувачем', 'err');
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function copyResults() {
+  const brief = getBrief();
+  let md = `# Listicle Outreach Results\n`;
+  md += `**Company:** ${brief.company}\n`;
+  md += `**Site:** ${brief.site}\n\n`;
+  md += `| # | URL | Згадка | Email |\n`;
+  md += `|---|-----|--------|-------|\n`;
+
+  results.forEach((r, i) => {
+    const mention = r.mention === 'yes' ? '✅ Так' : r.mention === 'no' ? '❌ Ні' : '❌ Недоступна';
+    const email = r.email === 'form' ? 'Форма' : (r.email || '—');
+    md += `| ${i+1} | ${r.url} | ${mention} | ${email} |\n`;
+  });
+
+  const noMention = results.filter(r => r.mention === 'no');
+  if (noMention.length) {
+    md += `\n---\n## Потребують outreach (${noMention.length} URL)\n\n`;
+    noMention.forEach((r, i) => {
+      const email = r.email === 'form' ? 'Форма' : (r.email || '—');
+      md += `${i+1}. ${r.url} | ${email}\n`;
+    });
+  }
+
+  navigator.clipboard.writeText(md).then(() => {
+    const btn = event.target;
+    btn.textContent = 'COPIED ✓';
+    setTimeout(() => btn.textContent = 'COPY TABLE', 2000);
+  });
+}
+</script>
+</body>
+</html>
